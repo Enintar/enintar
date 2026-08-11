@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Orthys — Minecraft сервер</title>
-    <meta name="description" content="Orthys — уютный Minecraft сервер для вас.">
+    <title>Enintar — Developer</title>
+    <meta name="description" content="Enintar — разработчик Minecraft проектов.">
 
     <style>
         * {
@@ -16,144 +16,321 @@
 
         body {
             min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            background: #0b0d12;
-            color: #ffffff;
-
+            background: #0b0d11;
+            color: #f2f3f5;
             font-family: Arial, Helvetica, sans-serif;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
         }
 
         .container {
             width: 100%;
-            max-width: 650px;
-            padding: 30px;
-            text-align: center;
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 60px 20px;
         }
 
-        .logo {
-            font-size: 48px;
-            font-weight: 800;
-            letter-spacing: 6px;
-            margin-bottom: 15px;
-        }
+        /* PROFILE */
 
-        .subtitle {
-            color: #9da3b0;
-            font-size: 18px;
+        .profile {
             margin-bottom: 45px;
         }
 
-        .server {
-            background: #12151c;
-            border: 1px solid #202530;
-            border-radius: 14px;
-            padding: 22px;
-            margin-bottom: 15px;
+        .avatar {
+            width: 76px;
+            height: 76px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 20px;
+
+            background: linear-gradient(
+                135deg,
+                #7896ff,
+                #8d6cff
+            );
+
+            font-size: 30px;
+            font-weight: 800;
+
+            margin-bottom: 18px;
+
+            box-shadow:
+                0 15px 40px rgba(120, 150, 255, 0.18);
         }
 
-        .server-title {
-            color: #8f98aa;
-            font-size: 13px;
-            margin-bottom: 8px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+        .name {
+            font-size: 30px;
+            font-weight: 750;
+
+            margin-bottom: 6px;
         }
 
-        .ip {
-            font-size: 22px;
-            font-weight: 700;
-            margin-bottom: 15px;
-        }
-
-        button,
-        .discord {
-            width: 100%;
-            border: none;
-            border-radius: 10px;
-            padding: 13px 18px;
-
+        .role {
+            color: #858c9a;
             font-size: 15px;
-            font-weight: 600;
+        }
 
-            cursor: pointer;
-            text-decoration: none;
-            display: block;
+        .bio {
+            color: #858c9a;
+            font-size: 14px;
+            line-height: 1.6;
+
+            max-width: 500px;
+
+            margin-top: 16px;
+        }
+
+        /* LINKS */
+
+        .links {
+            display: flex;
+            gap: 8px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .link {
+            padding: 8px 12px;
+
+            border-radius: 8px;
+
+            border: 1px solid #20242d;
+            background: #11141a;
+
+            color: #9da4b2;
+
+            font-size: 13px;
 
             transition: 0.2s;
         }
 
-        button {
-            background: #ffffff;
-            color: #0b0d12;
-        }
-
-        button:hover {
-            background: #e5e7eb;
-        }
-
-        .discord {
-            background: #5865f2;
+        .link:hover {
             color: white;
-            margin-top: 10px;
+            border-color: #363c48;
+            background: #151922;
         }
 
-        .discord:hover {
-            background: #4752c4;
-        }
+        /* SECTION */
 
-        .info {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-top: 15px;
-        }
+        .section-title {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
 
-        .info-card {
-            background: #12151c;
-            border: 1px solid #202530;
-            border-radius: 14px;
-            padding: 18px;
-        }
+            margin-bottom: 12px;
 
-        .info-title {
-            color: #777f90;
-            font-size: 12px;
-            margin-bottom: 7px;
+            color: #656d7b;
+
+            font-size: 11px;
+            font-weight: 700;
+
+            letter-spacing: 1.5px;
             text-transform: uppercase;
         }
 
-        .info-value {
-            font-size: 16px;
-            font-weight: 600;
+        /* PROJECT */
+
+        .project {
+            background: #11141a;
+
+            border: 1px solid #20242d;
+
+            border-radius: 15px;
+
+            padding: 20px;
+
+            transition: 0.2s;
         }
 
-        .about {
-            margin-top: 35px;
-            color: #8f96a5;
-            font-size: 14px;
-            line-height: 1.6;
+        .project:hover {
+            border-color: #343b48;
+            transform: translateY(-2px);
         }
 
-        footer {
-            margin-top: 35px;
-            color: #555c6b;
+        .project-header {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+        }
+
+        .project-icon {
+            width: 48px;
+            height: 48px;
+
+            border-radius: 12px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background: linear-gradient(
+                135deg,
+                #7896ff,
+                #8066df
+            );
+
+            font-size: 21px;
+            font-weight: 800;
+        }
+
+        .project-name {
+            font-size: 17px;
+            font-weight: 700;
+        }
+
+        .project-type {
+            color: #707887;
+            font-size: 12px;
+
+            margin-top: 4px;
+        }
+
+        .project-status {
+            margin-left: auto;
+
+            display: flex;
+            align-items: center;
+            gap: 6px;
+
+            color: #69d99b;
+
             font-size: 12px;
         }
 
-        @media (max-width: 500px) {
+        .status-dot {
+            width: 7px;
+            height: 7px;
+
+            border-radius: 50%;
+
+            background: #69d99b;
+
+            box-shadow: 0 0 9px #69d99b;
+        }
+
+        .project-description {
+            color: #858c9a;
+
+            font-size: 14px;
+            line-height: 1.6;
+
+            margin-top: 18px;
+        }
+
+        .project-info {
+            display: flex;
+            gap: 30px;
+
+            margin-top: 20px;
+            padding-top: 16px;
+
+            border-top: 1px solid #20242d;
+        }
+
+        .info {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .info-title {
+            color: #626a78;
+            font-size: 11px;
+        }
+
+        .info-value {
+            color: #d9dce3;
+            font-size: 13px;
+        }
+
+        .project-actions {
+            display: flex;
+            gap: 8px;
+
+            margin-top: 18px;
+        }
+
+        .button {
+            padding: 9px 13px;
+
+            border-radius: 8px;
+
+            background: #181c24;
+            border: 1px solid #272c36;
+
+            color: #d9dce3;
+
+            font-size: 12px;
+
+            transition: 0.2s;
+        }
+
+        .button:hover {
+            background: #202530;
+            border-color: #3a414e;
+        }
+
+        .button.primary {
+            background: #5865f2;
+            border-color: #5865f2;
+            color: white;
+        }
+
+        .button.primary:hover {
+            background: #4752c4;
+        }
+
+        /* FOOTER */
+
+        footer {
+            margin-top: 55px;
+
+            padding-top: 20px;
+
+            border-top: 1px solid #191d24;
+
+            display: flex;
+            justify-content: space-between;
+
+            color: #555c69;
+
+            font-size: 11px;
+        }
+
+        /* MOBILE */
+
+        @media (max-width: 520px) {
+
             .container {
-                padding: 20px;
+                padding: 40px 15px;
             }
 
-            .logo {
-                font-size: 38px;
+            .project-info {
+                gap: 18px;
+                flex-wrap: wrap;
             }
 
-            .info {
-                grid-template-columns: 1fr;
+            .project-status {
+                display: none;
+            }
+
+            .project-actions {
+                flex-direction: column;
+            }
+
+            .button {
+                text-align: center;
+            }
+
+            footer {
+                flex-direction: column;
+                gap: 8px;
             }
         }
     </style>
@@ -163,80 +340,202 @@
 
 <div class="container">
 
-    <div class="logo">ORTHYS</div>
+    <!-- PROFILE -->
 
-    <div class="subtitle">
-        Уютный сервер для вас
-    </div>
+    <section class="profile">
 
-    <div class="server">
-
-        <div class="server-title">
-            Minecraft сервер
+        <div class="avatar">
+            E
         </div>
 
-        <div class="ip" id="ip">
-            play.orthys.ru
+        <div class="name">
+            Enintar
         </div>
 
-        <button onclick="copyIP()">
-            Скопировать IP
-        </button>
-
-        <a
-            class="discord"
-            href="https://discord.gg/CHANGE_ME"
-            target="_blank"
-        >
-            Discord
-        </a>
-
-    </div>
-
-    <div class="info">
-
-        <div class="info-card">
-            <div class="info-title">
-                Версия
-            </div>
-
-            <div class="info-value">
-                26.1.2
-            </div>
+        <div class="role">
+            Developer
         </div>
 
-        <div class="info-card">
-            <div class="info-title">
-                Режим
-            </div>
-
-            <div class="info-value">
-                Выживание
-            </div>
+        <div class="bio">
+            Разработчик Minecraft проектов.
+            Создаю плагины, серверные системы и
+            инструменты для игровых проектов.
         </div>
 
+        <div class="links">
+
+            <a
+                class="link"
+                href="https://github.com/Enintar"
+                target="_blank"
+            >
+                GitHub
+            </a>
+
+            <a
+                class="link"
+                href="https://discord.gg/CHANGE_ME"
+                target="_blank"
+            >
+                Discord
+            </a>
+
+        </div>
+
+    </section>
+
+
+    <!-- PROJECTS -->
+
+    <div class="section-title">
+        <span>Projects</span>
+        <span>1</span>
     </div>
 
-    <div class="about">
-        Orthys — уютное ванильное выживание,
-        где можно просто играть, строить и
-        проводить время вместе с друзьями.
-    </div>
+
+    <!-- ORTHYS -->
+
+    <article class="project">
+
+        <div class="project-header">
+
+            <div class="project-icon">
+                O
+            </div>
+
+            <div>
+
+                <div class="project-name">
+                    Orthys
+                </div>
+
+                <div class="project-type">
+                    Minecraft Server
+                </div>
+
+            </div>
+
+            <div class="project-status">
+
+                <span class="status-dot"></span>
+
+                Online
+
+            </div>
+
+        </div>
+
+
+        <div class="project-description">
+
+            Уютный Minecraft сервер с ванильным
+            выживанием и комфортной атмосферой.
+
+        </div>
+
+
+        <div class="project-info">
+
+            <div class="info">
+
+                <span class="info-title">
+                    Version
+                </span>
+
+                <span class="info-value">
+                    26.1.2
+                </span>
+
+            </div>
+
+
+            <div class="info">
+
+                <span class="info-title">
+                    Type
+                </span>
+
+                <span class="info-value">
+                    Survival
+                </span>
+
+            </div>
+
+
+            <div class="info">
+
+                <span class="info-title">
+                    Platform
+                </span>
+
+                <span class="info-value">
+                    Minecraft Java
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="project-actions">
+
+            <a
+                class="button primary"
+                href="https://discord.gg/CHANGE_ME"
+                target="_blank"
+            >
+                Discord
+            </a>
+
+            <button
+                class="button"
+                onclick="copyIP()"
+                id="copyButton"
+            >
+                Copy IP
+            </button>
+
+        </div>
+
+    </article>
+
 
     <footer>
-        © 2026 Orthys
+
+        <span>
+            © 2026 Enintar
+        </span>
+
+        <span>
+            Minecraft Developer
+        </span>
+
     </footer>
 
 </div>
 
-<script>
-    function copyIP() {
-        const ip = document.getElementById("ip").innerText;
 
-        navigator.clipboard.writeText(ip).then(() => {
-            alert("IP сервера скопирован!");
-        });
-    }
+<script>
+
+function copyIP() {
+
+    const ip = "play.orthys.ru";
+
+    const button =
+        document.getElementById("copyButton");
+
+    navigator.clipboard.writeText(ip);
+
+    button.innerText = "Copied ✓";
+
+    setTimeout(() => {
+
+        button.innerText = "Copy IP";
+
+    }, 1500);
+
+}
+
 </script>
 
 </body>
