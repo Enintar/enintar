@@ -9,9 +9,18 @@ var canvas=document.getElementById('embers');
 if(!canvas)return;
 var ctx=canvas.getContext('2d');
 if(!ctx)return;
+var isCoarse=window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
+var isSmall=window.innerWidth<700;
+/* На слабых/мобильных устройствах сильно урезаем количество частиц,
+   чтобы избежать подвисаний */
+if(isCoarse||isSmall){
+canvas.style.display='none';
+return;
+}
 var W,H,particles=[];
 var COLORS=['255,196,145','255,150,90','120,150,255','255,120,80'];
-var COUNT=36;
+var COUNT=22;
+
 
 function resize(){
 W=canvas.width=window.innerWidth;
@@ -42,18 +51,18 @@ this.curAlpha=this.alpha*(0.6+0.4*Math.sin(this.life*6));
 if(this.y<-20)this.setup(false);
 };
 Particle.prototype.draw=function(){
-ctx.beginPath();
-var grad=ctx.createRadialGradient(this.x,this.y,0,this.x,this.y,this.r*4);
-grad.addColorStop(0,'rgba('+this.color+','+this.curAlpha+')');
-grad.addColorStop(1,'rgba('+this.color+',0)');
-ctx.fillStyle=grad;
-ctx.arc(this.x,this.y,this.r*4,0,Math.PI*2);
-ctx.fill();
-ctx.beginPath();
+/* Дешёвая отрисовка: обычный круг + shadowBlur для свечения,
+   без создания gradient-объекта на каждый кадр (важно для производительности) */
+ctx.save();
+ctx.shadowBlur=this.r*5;
+ctx.shadowColor='rgba('+this.color+','+this.curAlpha+')';
 ctx.fillStyle='rgba('+this.color+','+Math.min(1,this.curAlpha+0.25)+')';
+ctx.beginPath();
 ctx.arc(this.x,this.y,this.r,0,Math.PI*2);
 ctx.fill();
+ctx.restore();
 };
+
 
 for(var i=0;i<COUNT;i++)particles.push(new Particle(true));
 
@@ -111,29 +120,41 @@ items2.forEach(function(el){el.classList.remove('pending');el.classList.add('in'
 }
 }
 
-/* ---------- Тилт-эффект для карточек ---------- */
+/* ---------- Тилт-эффект для карточек (только для мыши, не для тач-устройств) ---------- */
 function initTilt(){
 try{
+/* На touch-устройствах нет mouseleave, из-за чего transform "залипал" —
+   поэтому полностью отключаем эффект для coarse pointer / hover:none */
+var isTouch=window.matchMedia && (window.matchMedia('(hover: none)').matches || window.matchMedia('(pointer: coarse)').matches);
+if(isTouch)return;
+
 var cards=document.querySelectorAll('[data-tilt]');
+var raf=null;
 cards.forEach(function(card){
+var rect=null;
 function onMove(e){
-var rect=card.getBoundingClientRect();
+if(!rect)rect=card.getBoundingClientRect();
 var px=(e.clientX-rect.left)/rect.width;
 var py=(e.clientY-rect.top)/rect.height;
+if(raf)return;
+raf=requestAnimationFrame(function(){
 var rx=(py-0.5)*-8;
 var ry=(px-0.5)*10;
 card.style.transform='perspective(700px) rotateX('+rx+'deg) rotateY('+ry+'deg) translateY(-4px)';
 card.style.setProperty('--mx',(px*100)+'%');
 card.style.setProperty('--my',(py*100)+'%');
+raf=null;
+});
 }
-function onLeave(){
-card.style.transform='';
-}
+function onEnter(){rect=card.getBoundingClientRect();}
+function onLeave(){card.style.transform='';rect=null;}
+card.addEventListener('mouseenter',onEnter);
 card.addEventListener('mousemove',onMove);
 card.addEventListener('mouseleave',onLeave);
 });
 }catch(e){}
 }
+
 
 /* ---------- Копирование discord-ссылки (если есть кнопка copy-invite) ---------- */
 function initCopyInvite(){
