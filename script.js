@@ -4,12 +4,14 @@
 
 /* ---------- Летающие огоньки (canvas) ---------- */
 function initEmbers(){
+try{
 var canvas=document.getElementById('embers');
 if(!canvas)return;
 var ctx=canvas.getContext('2d');
+if(!ctx)return;
 var W,H,particles=[];
 var COLORS=['255,196,145','255,150,90','120,150,255','255,120,80'];
-var COUNT=42;
+var COUNT=36;
 
 function resize(){
 W=canvas.width=window.innerWidth;
@@ -18,10 +20,10 @@ H=canvas.height=window.innerHeight;
 window.addEventListener('resize',resize);
 resize();
 
-function Particle(reset){
-this.reset(reset);
+function Particle(initial){
+this.setup(initial);
 }
-Particle.prototype.reset=function(initial){
+Particle.prototype.setup=function(initial){
 this.x=Math.random()*W;
 this.y=initial?Math.random()*H:H+20+Math.random()*60;
 this.r=1+Math.random()*2.6;
@@ -37,7 +39,7 @@ this.y-=this.speed;
 this.x+=this.drift+Math.sin(this.y*0.01)*0.4;
 this.life+=this.flicker;
 this.curAlpha=this.alpha*(0.6+0.4*Math.sin(this.life*6));
-if(this.y<-20)this.reset(false);
+if(this.y<-20)this.setup(false);
 };
 Particle.prototype.draw=function(){
 ctx.beginPath();
@@ -58,27 +60,38 @@ for(var i=0;i<COUNT;i++)particles.push(new Particle(true));
 var reduceMotion=window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 function loop(){
+try{
 ctx.clearRect(0,0,W,H);
 for(var i=0;i<particles.length;i++){
 particles[i].update();
 particles[i].draw();
 }
+}catch(e){}
 requestAnimationFrame(loop);
 }
 if(!reduceMotion)requestAnimationFrame(loop);
-else{
-for(var i=0;i<particles.length;i++){particles[i].draw();}
-}
+}catch(e){/* никогда не ломаем страницу из-за canvas */}
 }
 
-/* ---------- Скролл-появление секций ---------- */
+/* ---------- Скролл-появление секций (progressive enhancement) ---------- */
 function initReveal(){
+try{
 var items=document.querySelectorAll('.reveal');
 if(!items.length)return;
-if(!('IntersectionObserver' in window)){
+
+/* Помечаем элементы как "pending" только когда JS точно работает —
+   если что-то пойдёт не так, элементы останутся видимыми по умолчанию (CSS .reveal{opacity:1}) */
+items.forEach(function(el){el.classList.add('pending');});
+
+function showAll(){
 items.forEach(function(el){el.classList.add('in');});
+}
+
+if(!('IntersectionObserver' in window)){
+showAll();
 return;
 }
+
 var io=new IntersectionObserver(function(entries){
 entries.forEach(function(entry){
 if(entry.isIntersecting){
@@ -86,25 +99,32 @@ entry.target.classList.add('in');
 io.unobserve(entry.target);
 }
 });
-},{threshold:0.12,rootMargin:'0px 0px -40px 0px'});
+},{threshold:0.1,rootMargin:'0px 0px -30px 0px'});
 items.forEach(function(el){io.observe(el);});
+
+/* Страховка: если через 2.5с что-то не сработало (например, элемент вне вьюпорта
+   из-за нестандартной вёрстки) — просто показываем всё, чтобы контент не потерялся */
+setTimeout(showAll,2500);
+}catch(e){
+var items2=document.querySelectorAll('.reveal');
+items2.forEach(function(el){el.classList.remove('pending');el.classList.add('in');});
+}
 }
 
 /* ---------- Тилт-эффект для карточек ---------- */
 function initTilt(){
+try{
 var cards=document.querySelectorAll('[data-tilt]');
 cards.forEach(function(card){
-var rect;
 function onMove(e){
-rect=card.getBoundingClientRect();
+var rect=card.getBoundingClientRect();
 var px=(e.clientX-rect.left)/rect.width;
 var py=(e.clientY-rect.top)/rect.height;
 var rx=(py-0.5)*-8;
 var ry=(px-0.5)*10;
 card.style.transform='perspective(700px) rotateX('+rx+'deg) rotateY('+ry+'deg) translateY(-4px)';
-var glowX=px*100,glowY=py*100;
-card.style.setProperty('--mx',glowX+'%');
-card.style.setProperty('--my',glowY+'%');
+card.style.setProperty('--mx',(px*100)+'%');
+card.style.setProperty('--my',(py*100)+'%');
 }
 function onLeave(){
 card.style.transform='';
@@ -112,16 +132,17 @@ card.style.transform='';
 card.addEventListener('mousemove',onMove);
 card.addEventListener('mouseleave',onLeave);
 });
+}catch(e){}
 }
 
 /* ---------- Копирование discord-ссылки (если есть кнопка copy-invite) ---------- */
 function initCopyInvite(){
+try{
 var btn=document.getElementById('copyInvite');
 if(!btn)return;
 btn.addEventListener('click',function(){
 var link=btn.getAttribute('data-link')||'';
 var done=function(){
-var old=btn.querySelector('.discord-cta-text b')?null:null;
 btn.classList.add('copied');
 setTimeout(function(){btn.classList.remove('copied');},1500);
 };
@@ -131,13 +152,66 @@ navigator.clipboard.writeText(link).then(done).catch(done);
 done();
 }
 });
+}catch(e){}
 }
 
-/* ---------- Плавный active-подсвет навигации при скролле (для index) ---------- */
-function initNavScrollSpy(){
-var links=document.querySelectorAll('.nav-link[href^="#"]');
-if(!links.length)return;
-window.addEventListener('scroll',function(){},{passive:true});
+/* ---------- Прогресс-бар скролла ---------- */
+function initScrollProgress(){
+try{
+var bar=document.getElementById('scroll-progress');
+if(!bar)return;
+function update(){
+var h=document.documentElement;
+var scrollTop=h.scrollTop||document.body.scrollTop;
+var height=h.scrollHeight-h.clientHeight;
+var pct=height>0?(scrollTop/height)*100:0;
+bar.style.width=pct+'%';
+}
+window.addEventListener('scroll',update,{passive:true});
+window.addEventListener('resize',update);
+update();
+}catch(e){}
+}
+
+/* ---------- Спотлайт за курсором ---------- */
+function initCursorGlow(){
+try{
+if(window.matchMedia && window.matchMedia('(pointer: coarse)').matches)return;
+var glow=document.getElementById('cursor-glow');
+if(!glow)return;
+var raf=null,mx=0,my=0;
+window.addEventListener('mousemove',function(e){
+mx=e.clientX;my=e.clientY;
+glow.style.opacity='1';
+if(!raf){
+raf=requestAnimationFrame(function(){
+glow.style.transform='translate('+mx+'px,'+my+'px)';
+raf=null;
+});
+}
+});
+document.addEventListener('mouseleave',function(){glow.style.opacity='0';});
+}catch(e){}
+}
+
+/* ---------- Ripple-эффект на кнопках ---------- */
+function initRipple(){
+try{
+var buttons=document.querySelectorAll('.btn, .nav-cta, .discord-cta');
+buttons.forEach(function(btn){
+btn.addEventListener('click',function(e){
+var rect=btn.getBoundingClientRect();
+var ripple=document.createElement('span');
+var size=Math.max(rect.width,rect.height);
+ripple.className='ripple';
+ripple.style.width=ripple.style.height=size+'px';
+ripple.style.left=(e.clientX-rect.left-size/2)+'px';
+ripple.style.top=(e.clientY-rect.top-size/2)+'px';
+btn.appendChild(ripple);
+setTimeout(function(){ripple.remove();},650);
+});
+});
+}catch(e){}
 }
 
 document.addEventListener('DOMContentLoaded',function(){
@@ -145,6 +219,9 @@ initEmbers();
 initReveal();
 initTilt();
 initCopyInvite();
-initNavScrollSpy();
+initScrollProgress();
+initCursorGlow();
+initRipple();
 });
 })();
+
