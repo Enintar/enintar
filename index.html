@@ -5,332 +5,576 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Enintar — Developer</title>
-    <meta name="description" content="Enintar — разработчик Minecraft проектов.">
 
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
         }
 
+        :root {
+            --background: #07080c;
+            --card: rgba(15, 17, 24, 0.72);
+            --border: rgba(255, 255, 255, 0.08);
+            --text: #f5f7fb;
+            --muted: #858b9b;
+            --accent: #7c8cff;
+            --accent2: #a47cff;
+        }
+
         body {
             min-height: 100vh;
-            background: #0b0d11;
-            color: #f2f3f5;
-            font-family: Arial, Helvetica, sans-serif;
+
+            background:
+                radial-gradient(
+                    circle at 50% -10%,
+                    rgba(112, 125, 255, 0.18),
+                    transparent 35%
+                ),
+                var(--background);
+
+            color: var(--text);
+
+            font-family: "Inter", Arial, sans-serif;
         }
 
-        a {
-            color: inherit;
-            text-decoration: none;
+        /* BACKGROUND */
+
+        .noise {
+            position: fixed;
+            inset: 0;
+
+            pointer-events: none;
+
+            opacity: .025;
+
+            background-image:
+                url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");
         }
 
-        .container {
+        /* PAGE */
+
+        .page {
             width: 100%;
-            max-width: 720px;
-            margin: 0 auto;
-            padding: 60px 20px;
+            max-width: 850px;
+
+            margin: auto;
+
+            padding: 80px 22px 60px;
         }
 
         /* PROFILE */
 
         .profile {
-            margin-bottom: 45px;
+            display: flex;
+            align-items: center;
+
+            gap: 22px;
+
+            margin-bottom: 55px;
         }
 
         .avatar {
-            width: 76px;
-            height: 76px;
+            width: 86px;
+            height: 86px;
+
+            flex-shrink: 0;
 
             display: flex;
             align-items: center;
             justify-content: center;
 
-            border-radius: 20px;
+            border-radius: 24px;
 
-            background: linear-gradient(
-                135deg,
-                #7896ff,
-                #8d6cff
-            );
+            background:
+                linear-gradient(
+                    135deg,
+                    #7387ff,
+                    #9b70ff
+                );
+
+            font-size: 34px;
+            font-weight: 800;
+
+            box-shadow:
+                0 20px 60px rgba(110, 125, 255, .25);
+
+            position: relative;
+        }
+
+        .avatar::after {
+            content: "";
+
+            position: absolute;
+            inset: 1px;
+
+            border-radius: 23px;
+
+            border: 1px solid rgba(255,255,255,.25);
+        }
+
+        .profile-info {
+            flex: 1;
+        }
+
+        .name {
+            display: flex;
+            align-items: center;
+
+            gap: 9px;
 
             font-size: 30px;
             font-weight: 800;
 
-            margin-bottom: 18px;
-
-            box-shadow:
-                0 15px 40px rgba(120, 150, 255, 0.18);
+            letter-spacing: -.04em;
         }
 
-        .name {
-            font-size: 30px;
-            font-weight: 750;
+        .verified {
+            width: 18px;
+            height: 18px;
 
-            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 50%;
+
+            background: #7285ff;
+
+            font-size: 11px;
         }
 
         .role {
-            color: #858c9a;
-            font-size: 15px;
-        }
+            color: #969cac;
 
-        .bio {
-            color: #858c9a;
+            margin-top: 5px;
+
             font-size: 14px;
-            line-height: 1.6;
-
-            max-width: 500px;
-
-            margin-top: 16px;
         }
-
-        /* LINKS */
 
         .links {
             display: flex;
             gap: 8px;
-            margin-top: 20px;
-            flex-wrap: wrap;
+
+            margin-top: 15px;
         }
 
         .link {
-            padding: 8px 12px;
+            padding: 7px 11px;
 
             border-radius: 8px;
 
-            border: 1px solid #20242d;
-            background: #11141a;
+            border: 1px solid var(--border);
 
-            color: #9da4b2;
+            background: rgba(255,255,255,.025);
 
-            font-size: 13px;
+            color: #aab0be;
 
-            transition: 0.2s;
+            font-size: 12px;
+
+            transition: .2s;
         }
 
         .link:hover {
             color: white;
-            border-color: #363c48;
-            background: #151922;
+
+            background: rgba(255,255,255,.06);
+
+            border-color: rgba(255,255,255,.15);
+
+            transform: translateY(-1px);
         }
 
-        /* SECTION */
+        /* ABOUT */
 
-        .section-title {
+        .about {
+            margin-bottom: 50px;
+        }
+
+        .label {
+            color: #626979;
+
+            font-size: 10px;
+            font-weight: 700;
+
+            letter-spacing: .18em;
+
+            text-transform: uppercase;
+
+            margin-bottom: 13px;
+        }
+
+        .about-text {
+            max-width: 650px;
+
+            color: #a1a6b3;
+
+            font-size: 16px;
+
+            line-height: 1.75;
+        }
+
+        .highlight {
+            color: #e5e8ef;
+        }
+
+        /* PROJECTS */
+
+        .projects-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
 
-            margin-bottom: 12px;
-
-            color: #656d7b;
-
-            font-size: 11px;
-            font-weight: 700;
-
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
+            margin-bottom: 14px;
         }
 
-        /* PROJECT */
+        .count {
+            color: #626979;
+
+            font-size: 11px;
+
+            padding: 5px 9px;
+
+            border-radius: 20px;
+
+            background: rgba(255,255,255,.035);
+
+            border: 1px solid var(--border);
+        }
+
+        /* PROJECT CARD */
 
         .project {
-            background: #11141a;
+            position: relative;
 
-            border: 1px solid #20242d;
+            overflow: hidden;
 
-            border-radius: 15px;
+            border-radius: 22px;
 
-            padding: 20px;
+            border: 1px solid var(--border);
 
-            transition: 0.2s;
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(255,255,255,.055),
+                    rgba(255,255,255,.018)
+                );
+
+            padding: 25px;
+
+            transition: .3s;
+        }
+
+        .project::before {
+            content: "";
+
+            position: absolute;
+
+            width: 300px;
+            height: 200px;
+
+            top: -120px;
+            right: -80px;
+
+            background: #7285ff;
+
+            filter: blur(100px);
+
+            opacity: .12;
+
+            pointer-events: none;
         }
 
         .project:hover {
-            border-color: #343b48;
-            transform: translateY(-2px);
+            transform: translateY(-4px);
+
+            border-color: rgba(130,145,255,.25);
+
+            box-shadow:
+                0 25px 70px rgba(0,0,0,.25);
         }
 
-        .project-header {
+        .project-top {
             display: flex;
             align-items: center;
-            gap: 13px;
+
+            gap: 15px;
         }
 
         .project-icon {
-            width: 48px;
-            height: 48px;
-
-            border-radius: 12px;
+            width: 54px;
+            height: 54px;
 
             display: flex;
             align-items: center;
             justify-content: center;
 
-            background: linear-gradient(
-                135deg,
-                #7896ff,
-                #8066df
-            );
+            border-radius: 15px;
 
-            font-size: 21px;
+            background:
+                linear-gradient(
+                    135deg,
+                    #7287ff,
+                    #976eff
+                );
+
+            font-size: 23px;
             font-weight: 800;
+
+            box-shadow:
+                0 10px 35px rgba(116,135,255,.22);
         }
 
         .project-name {
-            font-size: 17px;
+            font-size: 18px;
             font-weight: 700;
+
+            letter-spacing: -.02em;
         }
 
         .project-type {
-            color: #707887;
+            color: #747b8c;
+
             font-size: 12px;
 
             margin-top: 4px;
         }
 
-        .project-status {
+        .status {
             margin-left: auto;
 
             display: flex;
             align-items: center;
-            gap: 6px;
 
-            color: #69d99b;
+            gap: 7px;
 
-            font-size: 12px;
+            color: #70dca0;
+
+            font-size: 11px;
+
+            padding: 6px 9px;
+
+            border-radius: 20px;
+
+            background: rgba(72, 220, 140, .07);
+
+            border: 1px solid rgba(72, 220, 140, .12);
         }
 
         .status-dot {
-            width: 7px;
-            height: 7px;
+            width: 6px;
+            height: 6px;
 
             border-radius: 50%;
 
-            background: #69d99b;
+            background: #70dca0;
 
-            box-shadow: 0 0 9px #69d99b;
+            box-shadow: 0 0 9px #70dca0;
         }
 
         .project-description {
-            color: #858c9a;
+            color: #9197a5;
 
             font-size: 14px;
-            line-height: 1.6;
 
-            margin-top: 18px;
-        }
+            line-height: 1.65;
 
-        .project-info {
-            display: flex;
-            gap: 30px;
+            max-width: 600px;
 
             margin-top: 20px;
-            padding-top: 16px;
-
-            border-top: 1px solid #20242d;
         }
 
-        .info {
+        /* SERVER */
+
+        .server {
             display: flex;
-            flex-direction: column;
-            gap: 5px;
+            align-items: center;
+            justify-content: space-between;
+
+            gap: 15px;
+
+            margin-top: 23px;
+
+            padding: 14px 15px;
+
+            border-radius: 13px;
+
+            background: rgba(5,7,11,.55);
+
+            border: 1px solid rgba(255,255,255,.055);
         }
 
-        .info-title {
-            color: #626a78;
-            font-size: 11px;
+        .server-left {
+            display: flex;
+            align-items: center;
+
+            gap: 11px;
         }
 
-        .info-value {
-            color: #d9dce3;
+        .server-icon {
+            width: 32px;
+            height: 32px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 9px;
+
+            background: rgba(255,255,255,.06);
+
+            font-size: 14px;
+        }
+
+        .server-ip {
+            color: #d9dce4;
+
+            font-family: monospace;
+
             font-size: 13px;
         }
 
-        .project-actions {
+        .server-label {
+            color: #626978;
+
+            font-size: 10px;
+
+            margin-top: 3px;
+        }
+
+        .copy {
+            border: 0;
+
+            color: #b8becb;
+
+            background: rgba(255,255,255,.06);
+
+            padding: 8px 11px;
+
+            border-radius: 8px;
+
+            font-size: 11px;
+
+            cursor: pointer;
+
+            transition: .2s;
+        }
+
+        .copy:hover {
+            color: white;
+
+            background: rgba(255,255,255,.1);
+        }
+
+        /* PROJECT FOOTER */
+
+        .project-footer {
             display: flex;
-            gap: 8px;
+            align-items: center;
+
+            justify-content: space-between;
 
             margin-top: 18px;
         }
 
-        .button {
-            padding: 9px 13px;
+        .tags {
+            display: flex;
+            gap: 6px;
+        }
 
-            border-radius: 8px;
+        .tag {
+            color: #727989;
 
-            background: #181c24;
-            border: 1px solid #272c36;
+            font-size: 10px;
 
-            color: #d9dce3;
+            padding: 5px 8px;
+
+            border-radius: 6px;
+
+            background: rgba(255,255,255,.035);
+
+            border: 1px solid rgba(255,255,255,.05);
+        }
+
+        .discord {
+            color: #aeb5ff;
 
             font-size: 12px;
 
-            transition: 0.2s;
+            transition: .2s;
         }
 
-        .button:hover {
-            background: #202530;
-            border-color: #3a414e;
-        }
-
-        .button.primary {
-            background: #5865f2;
-            border-color: #5865f2;
+        .discord:hover {
             color: white;
-        }
-
-        .button.primary:hover {
-            background: #4752c4;
         }
 
         /* FOOTER */
 
         footer {
-            margin-top: 55px;
-
-            padding-top: 20px;
-
-            border-top: 1px solid #191d24;
-
             display: flex;
             justify-content: space-between;
 
-            color: #555c69;
+            margin-top: 55px;
+            padding-top: 20px;
 
-            font-size: 11px;
+            border-top: 1px solid rgba(255,255,255,.06);
+
+            color: #505665;
+
+            font-size: 10px;
         }
 
         /* MOBILE */
 
-        @media (max-width: 520px) {
+        @media(max-width: 600px) {
 
-            .container {
-                padding: 40px 15px;
+            .page {
+                padding: 45px 16px;
             }
 
-            .project-info {
-                gap: 18px;
-                flex-wrap: wrap;
+            .profile {
+                align-items: flex-start;
             }
 
-            .project-status {
+            .avatar {
+                width: 68px;
+                height: 68px;
+
+                border-radius: 19px;
+
+                font-size: 27px;
+            }
+
+            .name {
+                font-size: 25px;
+            }
+
+            .status {
                 display: none;
             }
 
-            .project-actions {
-                flex-direction: column;
+            .server {
+                align-items: flex-start;
             }
 
-            .button {
-                text-align: center;
+            .server-left {
+                min-width: 0;
+            }
+
+            .project-footer {
+                align-items: flex-start;
+                gap: 15px;
+
+                flex-direction: column;
             }
 
             footer {
                 flex-direction: column;
-                gap: 8px;
+
+                gap: 7px;
             }
         }
     </style>
@@ -338,7 +582,9 @@
 
 <body>
 
-<div class="container">
+<div class="noise"></div>
+
+<div class="page">
 
     <!-- PROFILE -->
 
@@ -348,156 +594,195 @@
             E
         </div>
 
-        <div class="name">
-            Enintar
-        </div>
+        <div class="profile-info">
 
-        <div class="role">
-            Developer
-        </div>
+            <div class="name">
 
-        <div class="bio">
-            Разработчик Minecraft проектов.
-            Создаю плагины, серверные системы и
-            инструменты для игровых проектов.
-        </div>
+                Enintar
 
-        <div class="links">
+                <span class="verified">
+                    ✓
+                </span>
 
-            <a
-                class="link"
-                href="https://github.com/Enintar"
-                target="_blank"
-            >
-                GitHub
-            </a>
+            </div>
 
-            <a
-                class="link"
-                href="https://discord.gg/CHANGE_ME"
-                target="_blank"
-            >
-                Discord
-            </a>
+            <div class="role">
+                Minecraft Developer
+            </div>
+
+            <div class="links">
+
+                <a
+                    class="link"
+                    href="https://github.com/Enintar"
+                    target="_blank"
+                >
+                    GitHub
+                </a>
+
+                <a
+                    class="link"
+                    href="https://discord.gg/CHANGE_ME"
+                    target="_blank"
+                >
+                    Discord
+                </a>
+
+            </div>
 
         </div>
 
     </section>
 
 
+    <!-- ABOUT -->
+
+    <section class="about">
+
+        <div class="label">
+            About
+        </div>
+
+        <p class="about-text">
+
+            Разрабатываю <span class="highlight">
+            Minecraft плагины, серверные системы
+            и игровые проекты.</span>
+
+            Создаю проекты с упором на
+            производительность, простоту и
+            приятный игровой опыт.
+
+        </p>
+
+    </section>
+
+
     <!-- PROJECTS -->
 
-    <div class="section-title">
-        <span>Projects</span>
-        <span>1</span>
-    </div>
+    <section>
 
+        <div class="projects-header">
 
-    <!-- ORTHYS -->
-
-    <article class="project">
-
-        <div class="project-header">
-
-            <div class="project-icon">
-                O
+            <div class="label">
+                Projects
             </div>
 
-            <div>
+            <div class="count">
+                1 project
+            </div>
 
-                <div class="project-name">
-                    Orthys
+        </div>
+
+
+        <!-- ORTHYS -->
+
+        <article class="project">
+
+            <div class="project-top">
+
+                <div class="project-icon">
+                    O
                 </div>
 
-                <div class="project-type">
-                    Minecraft Server
+                <div>
+
+                    <div class="project-name">
+                        Orthys
+                    </div>
+
+                    <div class="project-type">
+                        Minecraft Server
+                    </div>
+
+                </div>
+
+                <div class="status">
+
+                    <span class="status-dot"></span>
+
+                    Online
+
                 </div>
 
             </div>
 
-            <div class="project-status">
 
-                <span class="status-dot"></span>
+            <p class="project-description">
 
-                Online
+                Уютный Minecraft сервер с ванильным
+                выживанием, комфортными механиками
+                и дружелюбной атмосферой.
 
-            </div>
-
-        </div>
-
-
-        <div class="project-description">
-
-            Уютный Minecraft сервер с ванильным
-            выживанием и комфортной атмосферой.
-
-        </div>
+            </p>
 
 
-        <div class="project-info">
+            <div class="server">
 
-            <div class="info">
+                <div class="server-left">
 
-                <span class="info-title">
-                    Version
-                </span>
+                    <div class="server-icon">
+                        ⛏
+                    </div>
 
-                <span class="info-value">
-                    26.1.2
-                </span>
+                    <div>
 
-            </div>
+                        <div class="server-ip">
+                            play.orthys.ru
+                        </div>
+
+                        <div class="server-label">
+                            Minecraft Java · Survival
+                        </div>
+
+                    </div>
+
+                </div>
 
 
-            <div class="info">
-
-                <span class="info-title">
-                    Type
-                </span>
-
-                <span class="info-value">
-                    Survival
-                </span>
+                <button
+                    class="copy"
+                    id="copyButton"
+                    onclick="copyIP()"
+                >
+                    Copy IP
+                </button>
 
             </div>
 
 
-            <div class="info">
+            <div class="project-footer">
 
-                <span class="info-title">
-                    Platform
-                </span>
+                <div class="tags">
 
-                <span class="info-value">
-                    Minecraft Java
-                </span>
+                    <span class="tag">
+                        Minecraft
+                    </span>
+
+                    <span class="tag">
+                        Survival
+                    </span>
+
+                    <span class="tag">
+                        26.1.2
+                    </span>
+
+                </div>
+
+
+                <a
+                    class="discord"
+                    href="https://discord.gg/CHANGE_ME"
+                    target="_blank"
+                >
+                    Join Discord →
+                </a>
 
             </div>
 
-        </div>
+        </article>
 
-
-        <div class="project-actions">
-
-            <a
-                class="button primary"
-                href="https://discord.gg/CHANGE_ME"
-                target="_blank"
-            >
-                Discord
-            </a>
-
-            <button
-                class="button"
-                onclick="copyIP()"
-                id="copyButton"
-            >
-                Copy IP
-            </button>
-
-        </div>
-
-    </article>
+    </section>
 
 
     <footer>
@@ -507,7 +792,7 @@
         </span>
 
         <span>
-            Minecraft Developer
+            Built with HTML & CSS
         </span>
 
     </footer>
